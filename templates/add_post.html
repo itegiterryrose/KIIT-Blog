@@ -2,7 +2,7 @@
 {% block content %}
 <main class="form-signin m-auto" style="width: 400px; background-color:white; box-shadow: 6px 6px 4px 6px rgba(0, 0, 0, 0.1);">
 <h3>New Blog Post</h3>
-    <form action="{{ url_for('add_blog_post') }}" method="post">
+    <form action="{{ url_for('add_post') }}" method="post">
     <div class="form-floating">
         <label for="title">Title:</label><br><br>
         <input type="text"  class="form-control" name="title" required><br>

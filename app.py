@@ -1,7 +1,12 @@
-from flask import Flask, request, render_template, redirect, url_for,abort
+from flask import Flask, request, render_template, redirect, url_for, abort, flash, session
 import sqlite3
 
 app = Flask(__name__)
+app.secret_key = "supersecretkey"
+
+# Hardcoded admin credentials
+ADMIN_USERNAME = "Kingori"
+ADMIN_PASSWORD = "nice"
 
 # Function to connect to the database
 def get_db_connection():
@@ -34,23 +39,58 @@ def home():
     return render_template('home.html', posts=posts)
 
 # Route to add a new blog post
-@app.route('/add', methods=['GET', 'POST'])
-def add_blog_post():
+
+@app.route('/admin_login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        if 'username' not in request.form or 'password' not in request.form:
+            flash("Missing username or password.", "danger")
+            return redirect(url_for('admin_login'))
+
+        username = request.form.get('username')  # Using `.get()` prevents KeyError
+        password = request.form.get('password')
+
+        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+            session['admin'] = True
+            flash("Login successful!", "success")
+            return redirect(url_for('add_post'))
+        else:
+            flash("Invalid credentials!", "danger")
+            return redirect(url_for('admin_login'))
+
+    return render_template('admin_login.html')
+
+
+@app.route('/add_post', methods=['GET', 'POST'])
+def add_post():
+    if not session.get('admin'):
+        flash("You must be an admin to add posts!", "danger")
+        return redirect(url_for('home'))
+
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
-        image_url = request.form['image_url']
+        image_url = request.form['image_url']  # Ensure this is provided
 
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO blog_posts (title, content, image_url) VALUES (?, ?, ?)",
-                       (title, content, image_url))
+        cursor.execute(
+            "INSERT INTO blog_posts (title, content, image_url) VALUES (?, ?, ?)",
+            (title, content, image_url),
+        )
         conn.commit()
         conn.close()
-        
-        return redirect(url_for('home'))  # Redirect to homepage after adding post
+        flash("Post added successfully!", "success")
+        return redirect(url_for('home'))
 
-    return render_template('add_post.html')  # Render the form
+    return render_template('add_post.html')
+
+
+@app.route('/logout')
+def logout():
+    session.pop('admin', None)  # Remove admin session
+    flash("Logged out successfully.", "info")
+    return redirect(url_for('home'))
 
 @app.route('/post/<int:post_id>')
 def get_blog_post(post_id):
@@ -70,13 +110,20 @@ def get_blog_post(post_id):
 
 @app.route('/delete/<int:post_id>', methods=['POST'])
 def delete_post(post_id):
+    # Check if admin is logged in
+    if not session.get('admin'):
+        flash("You must be an admin to delete posts!", "danger")
+        return redirect(url_for('home'))  
+
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("DELETE FROM blog_posts WHERE id = ?", (post_id,))
     conn.commit()
     conn.close()
     
-    return redirect(url_for('home'))  # Redirect to homepage after deleting
+    flash("Post deleted successfully!", "success")
+    return redirect(url_for('home'))
+  # Redirect to homepage after deleting
 
 if __name__ == '__main__':
     app.run(debug=True)

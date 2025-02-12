@@ -8,9 +8,11 @@
         <p>{{ post['content'][:100] }}...</p>
         <div class="button-group">
         <a  class="btn" href="{{ url_for('get_blog_post', post_id=post['id']) }}">Read More</a>
+        {% if 'admin' in session %}
         <form action="{{ url_for('delete_post', post_id=post['id']) }}" method="POST">
             <button type="submit" class="btn">Delete</button>
         </form>
+        {% endif %}
         </div>
         
     </div>

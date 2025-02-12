@@ -7,7 +7,7 @@ html, body {
 body {
     display: flex;
     flex-direction: column;
-    background-color: lightsteelblue; /* Light background */
+    background-color: #2F4F4F; /* Light background */
 }
 
 /* Navbar */
@@ -24,56 +24,6 @@ footer {
     padding: 10px;
     text-align: center;
     color: white;
-}
-
-/* Course Container */
-.course-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    justify-content: center;
-}
-
-/* Course Card */
-.course-card {
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    width: 330px;
-    height: auto;
-    text-align: center;
-    border-left: 5px solid deepskyblue;
-    transition: transform 0.3s ease-in-out;
-}
-
-.course-card a {
-    text-decoration: none;
-    color: skyblue;
-}
-
-.course-card a:hover {
-    color: #1f00cc;
-}
-
-.course-card:hover {
-    transform: translateY(-5px);
-}
-
-/* Apply Button */
-.apply-btn {
-    background-color: deepskyblue;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    margin-top: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background 0.3s ease-in-out;
-}
-
-.apply-btn:hover {
-    background-color: #1f00cc;
 }
 
 /* Blog Container */

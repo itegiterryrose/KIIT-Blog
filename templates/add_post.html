@@ -1,0 +1,21 @@
+{% extends'base.html' %}
+{% block content %}
+<main class="form-signin m-auto" style="width: 400px; background-color:white; box-shadow: 6px 6px 4px 6px rgba(0, 0, 0, 0.1);">
+<h3>New Blog Post</h3>
+    <form action="{{ url_for('add_blog_post') }}" method="post">
+    <div class="form-floating">
+        <label for="title">Title:</label><br><br>
+        <input type="text"  class="form-control" name="title" required><br>
+     </div>
+     <div class="form-floating">
+        <label for="content">Content:</label><br><br>
+        <textarea class="form-control"   name="content" rows="7" required></textarea><br>
+     </div>
+     <div class="form-floating">
+        <label for="image_url">Image URL:</label><br><br>
+        <input type="text"  class="form-control" name="image_url" required><br>
+     </div>
+     <button class="btn btn-primary w-100 py-2" type="submit">Submit</button>
+    </form>
+    </main>
+{% endblock %}

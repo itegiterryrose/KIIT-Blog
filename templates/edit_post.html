@@ -1,8 +1,18 @@
-{% extends'base.html' %}
+{% extends 'base.html' %}
 {% block content %}
-<main class="form-signin m-auto" style="background-color:lightslategrey; box-shadow: 6px 6px 4px 6px rgba(0, 0, 0, 0.1); margin-bottom: 20px;">
-<h3>New Blog Post</h3>
-    <form action="{{ url_for('add_post') }}" method="post">
+
+<h2>Edit Post</h2>
+
+<!-- Display flash messages -->
+{% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<form method="POST">
     <div class="form-floating">
         <label for="title">Title:</label><br><br>
         <input type="text"  class="form-control" name="title" required><br>
@@ -15,7 +25,9 @@
         <label for="image_url">Image URL:</label><br><br>
         <input type="text"  class="form-control" name="image_url" required><br>
      </div>
-     <button class="btn btn-primary w-100 py-2" type="submit">Submit</button>
+     <button class="btn btn-primary w-100 py-2" type="submit">Update</button>
     </form>
-    </main>
+
+<a href="{{ url_for('home') }}">Back to Home</a>
+
 {% endblock %}

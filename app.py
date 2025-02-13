@@ -125,5 +125,44 @@ def delete_post(post_id):
     return redirect(url_for('home'))
   # Redirect to homepage after deleting
 
+@app.route('/edit/<int:post_id>', methods=['GET', 'POST'])
+def edit_post(post_id):
+    if 'admin' not in session or not session['admin']:
+        flash("Access denied! Admins only.", "danger")
+        return redirect(url_for('home'))
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Fetch post details
+    cursor.execute("SELECT * FROM blog_posts WHERE id = ?", (post_id,))
+    post = cursor.fetchone()
+    
+    if not post:
+        conn.close()
+        flash("Post not found!", "danger")
+        return redirect(url_for('home'))
+    
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
+        image_url = request.form['image_url']
+
+        if not title or not content:
+            flash("Title and content cannot be empty!", "danger")
+            return redirect(url_for('edit_post', post_id=post_id))
+
+        # Update post
+        cursor.execute("UPDATE blog_posts SET title = ?, content = ?, image_url = ? WHERE id = ?", 
+                       (title, content, image_url, post_id))
+        conn.commit()
+        conn.close()
+        
+        flash("Post updated successfully!", "success")
+        return redirect(url_for('home'))
+    
+    conn.close()
+    return render_template('edit_post.html', post=post)
+
 if __name__ == '__main__':
     app.run(debug=True)

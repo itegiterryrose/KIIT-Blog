@@ -1,7 +1,9 @@
 {% extends'base.html' %}
 {% block content %}
 <h1>{{ post['title'] }}</h1>
-<img src="/{{ post['image_url'] }}" alt="Blog Image" width="550px" height="350px">
+<div style="text-align: center;" >
+<img src="/{{ post['image_url'] }}" alt="Blog Image" width="900px" height="350px" >
+</div>
 <p>{{ post['content'] }}</p>
 <a class="btn btn-primary w-40 py-2" href="{{ url_for('home') }}">Back to Home</a>
 {% endblock %}

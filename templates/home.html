@@ -1,24 +1,30 @@
 {% extends'base.html' %}
 {% block content %}
-<div class="blog-container">
+{% if posts|length > 0 %}
+    <div class="blog-container">
     {% for post in posts %}
-    <div class="blog-post">
-        <img src="{{ post['image_url'] }}" alt="Blog Image">
-        <h2>{{ post['title'] }}</h2>
-        <p>{{ post['content'][:100] }}...</p>
+        <div class="blog-post">
+            <img src="{{ post['image_url'] }}" alt="Blog Image" >
+            <h2>{{ post['title'] }}</h2>
+            <p>{{ post['content'][:100] }}...</p>
+
         <div class="button-group">
-        <a  class="btn" href="{{ url_for('get_blog_post', post_id=post['id']) }}">Read More</a>
-        {% if 'admin' in session %}
-        <form action="{{ url_for('delete_post', post_id=post['id']) }}" method="POST">
-            <button type="submit" class="btn">Delete</button>
-        </form>
-        {% endif %}
+            <a class="btn" href="{{ url_for('get_blog_post', post_id=post['id']) }}">Read More</a>
+
+            {% if 'admin' in session %}
+            <a class="btn" href="{{ url_for('edit_post', post_id=post['id']) }}">Edit</a>
+            <form action="{{ url_for('delete_post', post_id=post['id']) }}" method="POST">
+                <button type="submit" class="btn">Delete</button>
+            </form>
+            {% endif %}
         </div>
-        
+        </div>
+    {% endfor %}
     </div>
-        {% endfor %}
-</div>
-<footer>
-    <p>&copy; 2025 Kenya Institute Of Information Technology. All rights reserved.</p>
-</footer>
+{% else %}
+        <p style="text-align: center; font-size: 18px; color: gray; margin-top: 20px;">
+            No blog posts available. Be the first to add one!
+        </p>
+{% endif %}
 {% endblock %}
+    

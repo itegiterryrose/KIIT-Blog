@@ -53,7 +53,7 @@ def admin_login():
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
             session['admin'] = True
             flash("Login successful!", "success")
-            return redirect(url_for('add_post'))
+            return redirect(url_for('home'))
         else:
             flash("Invalid credentials!", "danger")
             return redirect(url_for('admin_login'))
